@@ -1,0 +1,18 @@
+server:
+  port: 8099
+
+eureka:
+  client:
+    serviceUrl:
+      #      defaultZone: http://localhost:8090/eureka/
+      #      注册服务到集群
+      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/
+
+#  需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+spring:
+  application:
+    name: client-ribbon02
+#ribbon配置可以按客户端配置
+CLIENT01:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule

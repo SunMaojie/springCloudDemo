@@ -1,0 +1,27 @@
+server:
+  port: 9014
+
+spring:
+  application:
+    name: gateway-eureka
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #表明gateway开启服务注册和发现的功能
+          lowerCaseServiceId: true #是将请求路径上的服务名配置为小写
+      routes:
+      - id: client01
+        uri: lb://CLIENT01
+        predicates:
+        - Path=/demo/**
+        filters: #并用StripPrefix的filter 在转发之前将/demo去掉
+        - StripPrefix=1
+#######################################################################################
+#######################################################################################
+eureka:
+  client:
+    serviceUrl:
+            defaultZone: http://localhost:8090/eureka/
+      #      注册服务到集群
+#      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/

@@ -1,0 +1,26 @@
+server:
+  port: 9004
+#  需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        svn:
+          uri: https://jx-2003:8443/svn/MyMavenProject/springCloudDemo/spring-cloud-config-demo/
+          search-paths: config-file #配置仓库路径
+          default-label: #配置仓库分支
+          username: SMJ
+          password: 469989
+  profiles:
+    active: subversion #使用svn作为配置中心，默认为git
+
+#############################################################
+#利用eureka实现高可用的分布式配置中心
+eureka:
+  client:
+    serviceUrl:
+            defaultZone: http://localhost:8090/eureka/
+      #      注册服务到集群
+#      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/

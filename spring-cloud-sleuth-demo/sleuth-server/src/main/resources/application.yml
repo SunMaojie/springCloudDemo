@@ -1,0 +1,22 @@
+server:
+  port: 9010
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+#      注册服务到集群
+#      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/
+
+#  需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+spring:
+  application:
+    name: sleuth-server
+  zipkin: #指定zipkin server的地址
+    base-url: http://localhost:9411
+  sleuth:
+    web:
+      client:
+        enabled: true #设置的是web开启sleuth功能
+    sampler:
+      probability: 1.0 # 将采样比例设置为 1.0，也就是全部都需要。默认是 0.1

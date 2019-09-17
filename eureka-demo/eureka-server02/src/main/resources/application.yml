@@ -1,0 +1,16 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: eurekaServer02
+
+eureka:
+  instance:
+    hostname: eurekaServerHost02
+  client:
+    register-with-eureka: false # 是否注册自己到eureka
+    fetch-registry: false # 是否拉取其他eureka上的数据(如：注册列表) false表明自己是eureka server
+    serviceUrl:
+      defaultZone: http://eurekaServerHost01:8090/eureka/
+  server:
+    enable-self-preservation: false  #当server在15分钟内(900s)，比值低于percent，即少了15%的微服务心跳，server会进入自我保护状态，Self-Preservation。

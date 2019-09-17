@@ -1,0 +1,57 @@
+server:
+  port: 9004
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+#      注册服务到集群
+#      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/
+
+#  需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+spring:
+  application:
+    name: hystrix-turbine-client01
+#ribbon的超时时间, 防止feign调用超时
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 15000
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  OkToRetryOnAllOperations: false  #是否所有操作都重试
+
+#ribbon配置可以按客户端配置
+CLIENT01:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+#feign中启用hystric熔断功能
+feign:
+  hystrix:
+    enabled: true
+
+#hystrix默认打开断路器的时间为1m
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+#添加actuator节点中
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
+#trubine配置
+turbine:
+  app-config: hystrix-turbine-client01,HYSTRIX-DASHBOARD-CLIENT01  #指定了要监控的应用名称
+  aggregator:
+    clusterConfig: default
+  clusterNameExpression: new String("default") #表示集群的名字为default
+  combine-host: true #表示同一主机上的服务通过host和port的组合来进行区分，默认情况下是使用host来区分，这样会使本地调试有问题
+  instanceUrlSuffix:
+    default: actuator/hystrix.stream

@@ -1,0 +1,31 @@
+server:
+  port: 8093
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+#      注册服务到集群
+#      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/
+
+#  需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+spring:
+  application:
+    name: zuul-filter01
+
+zuul:
+  routes:
+    api-a:
+      path: /api-a/**
+      serviceId: hystrix-feign01
+    api-b:
+        path: /api-b/**
+        serviceId: CLIENT03
+#ribbon的超时时间
+#zuul默认和Ribbon结合实现了负载均衡的功能
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 15000
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  OkToRetryOnAllOperations: false  #是否所有操作都重试

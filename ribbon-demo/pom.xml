@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>springcloud-demo</artifactId>
+        <groupId>jx.demo</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>jx.demo.springcloud-demo</groupId>
+    <artifactId>ribbon</artifactId>
+    <name>ribbon-demo</name>
+    <packaging>pom</packaging>
+    <description>ribbon示例,服务消费者,Spring cloud有两种服务调用方式，一种是ribbon+restTemplate，另一种是feign</description>
+    <modules>
+
+        <module>ribbon-client</module>
+        <module>ribbon-client02</module>
+
+    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--Spring Cloud 版本是 Finchley.RC1及以上，，spring-cloud-starter-netflix-eureka-client 里边已经包含了 spring-cloud-starter-netflix-ribbon 了。-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>-->
+        <!--</dependency>-->
+    </dependencies>
+
+</project>

@@ -1,0 +1,4 @@
+#刷新配置需要秘钥
+encrypt:
+  #秘钥
+  key: jx.demo

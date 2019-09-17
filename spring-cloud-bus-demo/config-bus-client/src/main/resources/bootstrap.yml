@@ -1,0 +1,52 @@
+server:
+  port: 9006
+#  需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name
+spring:
+  pplication:
+    name: config-bus-client # 这里要跟文件（config-client-dev.yml）的前面的application段相同
+  cloud:
+    config:
+      #      label: #指明远程仓库的分支
+#      uri: http://localhost:9004/ #指明配置服务中心的网址
+      name: config-client
+      profile: dev #div test pro 多环境配置
+      discovery:
+        enabled: true #是从配置中心读取文件
+        service-id: config-server #配置中心的servieId，即服务名，替代spring.cloud.config.uri
+################################################################################################
+################################################################################################
+#使用spring cloud bus
+    bus:
+      enabled: true
+      trace:
+        enabled: true #ack开关
+  rabbitmq:
+    host: 10.37.31.88
+    port: 8080
+    username: test
+    password: test@123
+  devtools:
+    add-properties: false
+
+#添加bus-refesh到actuator节点中
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+################################################################################
+################################################################################
+#注册服务到eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+      #      注册服务到集群
+#      defaultZone: http://localhost:8090/eureka/,http://localhost:8091/eureka/
+#ribbon的超时时间, 防止feign调用超时
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 15000
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  OkToRetryOnAllOperations: false  #是否所有操作都重试

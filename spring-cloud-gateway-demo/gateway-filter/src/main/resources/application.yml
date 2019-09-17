@@ -1,0 +1,35 @@
+server:
+  port: 9012
+#指定了程序的spring的启动文件为filter_route文件
+spring:
+  profiles:
+    active: filter_route
+
+#一个新文件
+#  在application.yml再建一个配置文件，语法是三个横线，在此配置文件中通过spring.profiles来配置文件名，和spring.profiles.active一致
+---
+spring:
+  profiles: filter_route
+  cloud:
+    gateway:
+      routes:
+      - id: filter_route_id  #id标签配置的是router的id，每个router都需要一个唯一的id
+        uri: http://httpbin.org:80  #uri配置的是将请求路由到哪里
+        predicates:
+        # 1、跟时间相关的predicates,这个After就是指定了它的Gateway web handler类为AfterRoutePredicateFactory,BeforeRoutePredicateFactory、BetweenRoutePredicateFactory
+        - After=2022-01-20T17:42:47.789-07:00[America/Denver]
+        filters:
+#1、AddRequestHeader GatewayFilter Factory  添加请求头的过滤工厂
+#        过滤器工厂会在请求头加上一对请求头，名称为X-Request-Foo，值为Bar
+        - AddRequestHeader=X-Request-Foo, Bar
+#2、RewritePath GatewayFilter Factory 有一个非常强大的功能就是重写路径，这个功能是Zuul没有的
+#        将/foo/(?.*)重写为{segment}
+        - RewritePath=/foo/(?<segment>.*), /$\{segment}
+#3、Spring Cloud Gateway内置了19种强大的过滤器工厂，能够满足很多场景的需求
+#4、自定义filter工厂
+      - id: filter_route_id2  #id标签配置的是router的id，每个router都需要一个唯一的id
+        uri: http://httpbin.org:80  #uri配置的是将请求路由到哪里
+        filters:
+        - RequestTime=true
+        predicates:
+        - Path=/forms/{segment}
